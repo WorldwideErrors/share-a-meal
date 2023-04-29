@@ -130,7 +130,77 @@ const userController = {
       });
     },
   
-    deleteUser: (req, res) => {}
+    inactivateUser: (req, res) => {
+      logger.info("Inactivate user");
+
+      const userId = req.params.userId;
+
+        let sqlStatement = 'UPDATE `user` SET `isActive` = 0  WHERE id=' + userId;
+        
+        pool.getConnection(function (err, conn) {
+          // Do something with the connection
+          if (err) {
+            console.log('error', err);
+            next('error: ' + err.message);
+          }
+          if (conn) {
+            conn.query(sqlStatement, function (err, results, fields) {
+              if (err) {
+                logger.err(err.message);
+                next({
+                  code: 409,
+                  message: err.message
+                });
+              }
+              if (results) {
+                logger.info('Found', results.length, 'results');
+                res.status(200).json({
+                  statusCode: 200,
+                  message: 'User met id: ' + userId + ' is op inactief gezet' ,
+                  data: results
+                });
+              }
+            });
+            pool.releaseConnection(conn);
+          }
+        });
+    },
+
+    deleteUser: (req, res) => {
+      logger.info("Delete user");
+
+      const userId = req.params.userId;
+
+        let sqlStatement = 'DELETE FROM `user` WHERE id=' + userId;
+        
+        pool.getConnection(function (err, conn) {
+          // Do something with the connection
+          if (err) {
+            console.log('error', err);
+            next('error: ' + err.message);
+          }
+          if (conn) {
+            conn.query(sqlStatement, function (err, results, fields) {
+              if (err) {
+                logger.err(err.message);
+                next({
+                  code: 409,
+                  message: err.message
+                });
+              }
+              if (results) {
+                logger.info('Found', results.length, 'results');
+                res.status(200).json({
+                  statusCode: 200,
+                  message: 'User met id: ' + userId + ' verwijderd' ,
+                  data: results
+                });
+              }
+            });
+            pool.releaseConnection(conn);
+          }
+        });
+      }
   };
   
   module.exports = userController;
