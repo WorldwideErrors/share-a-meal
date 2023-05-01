@@ -130,6 +130,7 @@ const userController = {
       });
     },
   
+    // Function to update the user to inactive instead of active.
     inactivateUser: (req, res) => {
       logger.info("Inactivate user");
 
@@ -166,6 +167,7 @@ const userController = {
         });
     },
 
+    // Function to delete the user from the database
     deleteUser: (req, res) => {
       logger.info("Delete user");
 
