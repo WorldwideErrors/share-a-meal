@@ -16,6 +16,7 @@ router.get('/:userId', userController.getOneUser);
 // UC-205 Updaten van usergegevens
 // router.post('', userController.updateUser);
 
+// Inactivates user
 router.get('/:userId/inactivate', userController.inactivateUser);
 
 // UC-206 Verwijderen van user
