@@ -25,7 +25,6 @@ jobs:
           
           steps: 
             - uses: actions/checkout@v2 
-            # Database connection
             - name: Start MySQL connection from host 
               run: | 
                 sudo /etc/init.d/mysql start 
