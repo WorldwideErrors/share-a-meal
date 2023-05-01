@@ -1,13 +1,9 @@
 name: Testing and deployment
 
- 
-
 on:
   push:
     # branches:
       # - master
-
- 
 
 jobs:
   integrationtests:
@@ -29,8 +25,6 @@ jobs:
           MYSQL_DATABASE: ${{ env.DB_DATABASE }}
     steps:
       - uses: actions/checkout@v2
-
- 
 
       - name: Start MySQL connection from host
         run: |
