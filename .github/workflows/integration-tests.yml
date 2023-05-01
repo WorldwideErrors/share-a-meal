@@ -1,47 +1,47 @@
-name: Testing and deployment
-
-on:
-  push:
-    branches:
-     - *
-
+name: Setup and Test MySQL Database
+ 
+on: [push]
+ 
 jobs:
-  integrationtests:
-    runs-on: ubuntu-latest
-    env:
-      MYSQL_ROOT_PASSWORD: root # default root password to use must be 'root'
-      DB_HOST: 127.0.0.1
-      DB_PORT: 3306
-      DB_DATABASE: share_a_meal
-      DB_USER: root
-      DB_PASSWORD: root
-    services:
-      mysql:
-        image: mysql:5.7
-        ports:
-          - 3306
-        env:
-          MYSQL_ROOT_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
-          MYSQL_DATABASE: ${{ env.DB_DATABASE }}
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Start MySQL connection from host
-        run: |
-          sudo /etc/init.d/mysql start
-          sudo apt-get install -y mysql-client
-          mysql -uroot -p${{ env.MYSQL_ROOT_PASSWORD }} -e "SHOW DATABASES;"
-          mysql -uroot -p${{ env.MYSQL_ROOT_PASSWORD }} -e "CREATE DATABASE IF NOT EXISTS ${{env.DB_DATABASE}};"
-      - name: Import database script
-        run: |
-          mysql -uroot -p${{env.MYSQL_ROOT_PASSWORD}} ${{env.DB_DATABASE}} < share-a-meal.sql
-          mysql -uroot -p${{env.MYSQL_ROOT_PASSWORD}} ${{env.DB_DATABASE}} -e "SHOW TABLES;"
-      - name: npm install
-        run: |
-          npm install
-      - name: install mocha
-        run: |
-          npm install -g mocha && chmod +x "$(command -v mocha)"
-      - name: npm test
-        run: |
-          npm test -- --DB_PASSWORD ${{ env.DB_PASSWORD }} --DB_USER ${{ env.DB_USER }} --DB_NAME ${{ env.DB_DATABASE }}
+  test-database:
+    runs-on: ubuntu-latest
+ 
+    services:
+      mysql:
+        image: mysql:latest
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: share_a_meal
+ 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+ 
+      - name: Install Node.js and npm
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+ 
+      - name: Install mocha
+        run: |
+          npm install -g mocha
+          chmod +x "$(command -v mocha)"
+ 
+      - name: Install MySQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install mysql-client
+ 
+      - name: Wait for MySQL to be available
+        run: |
+          until mysql -h127.0.0.1 -uroot -proot -e ";" ; do sleep 1 ; done
+ 
+      - name: Create database tables
+        run: |
+          mysql -h127.0.0.1 -uroot -proot < share-a-meal.sql
+ 
+      - name: Run tests
+        run: |
+          npm test
