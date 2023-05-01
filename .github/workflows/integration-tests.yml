@@ -20,6 +20,7 @@ jobs:
 
             # Install dependencies
             - run: npm install
+            - run: npm install -g mocha && chmod +x "$(command -v mocha)"
 
             # Run tests
             - run: npm test
