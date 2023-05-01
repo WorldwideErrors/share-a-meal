@@ -2,8 +2,8 @@ name: Testing and deployment
 
 on:
   push:
-    branches:
-      - master
+    # branches:
+      # - master
 
 jobs:
   integrationtests:
