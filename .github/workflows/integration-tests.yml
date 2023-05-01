@@ -13,7 +13,7 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: share_a_meal
+          MYSQL_DATABASE: shareameal
  
     steps:
       - name: Checkout repository
@@ -40,7 +40,7 @@ jobs:
  
       - name: Create database tables
         run: |
-          mysql -h127.0.0.1 -uroot -proot -e "USE share_a_meal; SOURCE share-a-meal.sql;"
+          mysql -h127.0.0.1 -uroot -proot -e "USE shareameal; SOURCE share-a-meal.sql;"
  
       - name: Run tests
         run: |
