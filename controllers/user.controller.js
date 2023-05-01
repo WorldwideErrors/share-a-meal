@@ -48,12 +48,6 @@ const userController = {
         const userId = req.params.userId;
 
         let sqlStatement = 'SELECT * FROM `user` WHERE id=' + userId;
-        // Hier wil je misschien iets doen met mogelijke filterwaarden waarop je zoekt.
-        if (req.query.isactive) {
-          // voeg de benodigde SQL code toe aan het sql statement
-          // bv sqlStatement += " WHERE `isActive=?`"
-          
-        }
     
         pool.getConnection(function (err, conn) {
           // Do something with the connection
