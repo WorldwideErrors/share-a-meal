@@ -43,7 +43,7 @@ const userController = {
       });
     },
 
-    getOneUser: (req, res, next) => {
+    getUserByID: (req, res, next) => {
         logger.info('Get specific user');
         const userId = req.params.userId;
 
@@ -68,7 +68,7 @@ const userController = {
                 logger.info('Found', results.length, 'results');
                 res.status(200).json({
                   statusCode: 200,
-                  message: 'User getOne endpoint',
+                  message: 'User getUserByID endpoint',
                   data: results
                 });
               }

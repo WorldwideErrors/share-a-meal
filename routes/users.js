@@ -11,7 +11,7 @@ router.post('', userController.createUser);
 router.get('', userController.getAllUsers);
 
 // UC-204 Opvragen van usergegevens bij ID
-router.get('/:userId', userController.getOneUser);
+router.get('/:userId', userController.getUserByID);
 
 // UC-205 Updaten van usergegevens
 // router.post('', userController.updateUser);
